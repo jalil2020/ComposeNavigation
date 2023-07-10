@@ -1,4 +1,4 @@
-package com.example.composenavigation
+package com.example.composenavigation.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.composenavigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.composenavigation
+package com.example.composenavigation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,6 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.composenavigation.Screens
+import com.example.composenavigation.screen.FirstScreen
+import com.example.composenavigation.screen.MainScreen
 
 @Composable
 fun Navigation() {
