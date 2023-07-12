@@ -14,11 +14,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.composenavigation.R
+import com.example.composenavigation.Screens
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onClick:(String)->Unit) {
     ScreenContent("Home") {
-
+        onClick(Screens.IntegroScreen.route)
     }
 }
 

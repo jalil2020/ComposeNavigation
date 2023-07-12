@@ -1,5 +1,6 @@
 package com.example.composenavigation.screen
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -31,13 +35,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.composenavigation.Screens
 import com.example.composenavigation.navigation.BottomNavItem
-import com.example.composenavigation.navigation.Graph
 import com.example.composenavigation.navigation.MainGraph
-import com.example.composenavigation.navigation.NavigationGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainContainer(navController: NavHostController) {
+fun MainContainer(navController: NavHostController = rememberNavController()) {
 
     val items = arrayListOf(
         BottomNavItem.HomeScreen,
@@ -45,39 +47,47 @@ fun MainContainer(navController: NavHostController) {
         BottomNavItem.FavoriteScreen,
         BottomNavItem.ProfileScreen,
     )
-    val navController2 = rememberNavController()
+
+    val isVisableButtomBar = remember {
+        mutableStateOf(true)
+    }
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        isVisableButtomBar.value = items.find { it.screen_route == destination.route } != null
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(Color.Green),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val navBackStackEntry by navController2.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-            items.onEach { screen ->
-                val selected =
-                    currentDestination?.hierarchy?.any() { it.route == screen.screen_route } == true
-                Image(
-                    modifier = Modifier
-                        .weight(1f, true)
-                        .clip(CircleShape)
-                        .scale(if (selected) 1.5f else 1f)
-                        .background(color = if (selected) Color.Red else Color.Transparent)
-                        .clickable {
-                            navController2.navigate(screen.screen_route) {
-                                popUpTo(navController2.graph.findStartDestination().id) {
-                                    saveState = true
+        if (isVisableButtomBar.value) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .background(Color.Green),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                items.onEach { screen ->
+                    val selected =
+                        currentDestination?.hierarchy?.any() { it.route == screen.screen_route } == true
+                    Image(
+                        modifier = Modifier
+                            .weight(1f, true)
+                            .clip(CircleShape)
+                            .scale(if (selected) 1.5f else 1f)
+                            .background(color = if (selected) Color.Red else Color.Transparent)
+                            .clickable {
+                                navController.navigate(screen.screen_route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                    painter = painterResource(id = screen.icon),
-                    contentDescription = null
-                )
+                            },
+                        painter = painterResource(id = screen.icon),
+                        contentDescription = null
+                    )
+                }
             }
         }
     }) { innerPadding ->
@@ -86,12 +96,12 @@ fun MainContainer(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(innerPadding)
         ) {
-              NavHost(navController = navController, startDestination = Screens.Main.HomeScreen.route){
-                  composable(route = Screens.Main.HomeScreen.route){
-                      HomeScreen()
-                  }
-              }
-//            MainGraph(navController = navController)
+            /* NavHost(navController = navController, startDestination = Screens.Main.HomeScreen.route){
+                 composable(route = Screens.Main.HomeScreen.route){
+                     HomeScreen()
+                 }
+             }*/
+            MainGraph(navController = navController)
         }
     }
 
