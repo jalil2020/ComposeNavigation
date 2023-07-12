@@ -1,6 +1,5 @@
 package com.example.composenavigation.screen
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,16 +23,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.composenavigation.Screens
 import com.example.composenavigation.navigation.BottomNavItem
 import com.example.composenavigation.navigation.MainGraph
 
@@ -96,11 +90,6 @@ fun MainContainer(navController: NavHostController = rememberNavController()) {
                 .fillMaxWidth()
                 .padding(innerPadding)
         ) {
-            /* NavHost(navController = navController, startDestination = Screens.Main.HomeScreen.route){
-                 composable(route = Screens.Main.HomeScreen.route){
-                     HomeScreen()
-                 }
-             }*/
             MainGraph(navController = navController)
         }
     }
