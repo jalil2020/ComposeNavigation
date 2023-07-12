@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.composenavigation.Screens
 import kotlinx.coroutines.delay
 
 @Composable
@@ -28,8 +29,8 @@ fun SplashScreen(navController: NavController) {
                 OvershootInterpolator(2f).getInterpolation(it)
             })
         )
-        delay(3000)
-        navController.navigate("main_screen")
+        delay(1000)
+        navController.navigate(Screens.IntegroScreen.route)
 
     }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
